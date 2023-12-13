@@ -32,8 +32,7 @@ void PW_changed();
 void PW_interrupted();
 void PW_timeout();
 void PW_mode_changed();
-void PW_flash();
-void SetupPins();
+void pinSetup();
 char getKey();
 void syncNVS();
 
@@ -90,7 +89,7 @@ void app_main() {
 
     int index = 0;
     char c;
-    SetupPins();
+    pinSetup();
 
     // Main program loop
     while(1){
@@ -107,7 +106,7 @@ void app_main() {
                     // Password setting process restarted
                     index = 0;
                     timeoutOn = false;
-                    PW_flash();
+                    PW_mode_changed();
                 }
                 else if(c == 'X') {
                     // Timed out
@@ -288,6 +287,7 @@ void PW_changed() {
         gpio_set_level(pin_g_led, 0);
         vTaskDelay(20);
     }
+    gpio_set_level(pin_g_led, 1);
 }
 
 // Pressed '#' - reset PW attempt
@@ -297,8 +297,8 @@ void PW_interrupted() {
     gpio_set_level(pin_g_led, 0);
 }
 
-// The PW has not been completed in time
-// Timeout after 3 seconds of inactivity
+// The PW has not been completed in time.
+// Timeout after 3 seconds of inactivity.
 void PW_timeout() {
     for(int i = 0; i < 3; i++){
         gpio_set_level(pin_r_led, 0);
@@ -308,19 +308,10 @@ void PW_timeout() {
     }
 }
 
-// Changed mode to setting new PW
+// Changed mode to "setting new PW"
 void PW_mode_changed() {
     gpio_set_level(pin_g_led, 1);
     vTaskDelay(100);
-    gpio_set_level(pin_g_led, 0);
-    gpio_set_level(pin_r_led, 0);
-}
-
-// Flash LEDs when reseting the "Set new PW" process
-void PW_flash() {
-    gpio_set_level(pin_g_led, 1);
-    gpio_set_level(pin_r_led, 1);
-    vTaskDelay(40);
     gpio_set_level(pin_g_led, 0);
     gpio_set_level(pin_r_led, 0);
 }
@@ -360,7 +351,7 @@ char getKey() {
 }
 
 // Setting INPUT/OUTPUT on PINS
-void SetupPins() {
+void pinSetup() {
     // Green LED settings
     gpio_set_direction(pin_g_led, GPIO_MODE_OUTPUT);
     gpio_set_level(pin_g_led, 0);
