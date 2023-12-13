@@ -132,7 +132,6 @@ void app_main() {
                         }
                         matchPW = true;
                         index = 0;
-                        timeoutOn = false;
                         continue;
                     }
                     index++;
@@ -287,7 +286,7 @@ void PW_changed() {
         gpio_set_level(pin_g_led, 0);
         vTaskDelay(20);
     }
-    gpio_set_level(pin_g_led, 1);
+    gpio_set_level(pin_r_led, 1);
 }
 
 // Pressed '#' - reset PW attempt
@@ -333,6 +332,7 @@ char getKey() {
                     while(gpio_get_level(pin_cols[j]) == 0) { // Wait until the button is released
                         vTaskDelay(5);                        // to prevent detecting the same 
                     }                                         // button press multiple times
+                    passedTime = 0;                                         
                     return keys[i][j];
                 }
             }
