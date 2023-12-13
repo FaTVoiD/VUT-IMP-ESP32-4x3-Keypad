@@ -32,6 +32,7 @@ void PW_changed();
 void PW_interrupted();
 void PW_timeout();
 void PW_mode_changed();
+void PW_mode_changed_back();
 void pinSetup();
 char getKey();
 void syncNVS();
@@ -101,6 +102,7 @@ void app_main() {
                     settingNewPW = false;
                     timeoutOn = false;
                     index = 0;
+                    PW_mode_changed_back();
                 }
                 else if(c == '*') {
                     // Password setting process restarted
@@ -147,6 +149,7 @@ void app_main() {
                     secondPhase = false;
                     index = 0;
                     timeoutOn = false;
+                    PW_mode_changed_back();
                 }
                 else if(c == 'X') {
                     // Timed out
@@ -313,6 +316,15 @@ void PW_mode_changed() {
     vTaskDelay(100);
     gpio_set_level(pin_g_led, 0);
     gpio_set_level(pin_r_led, 0);
+}
+
+void PW_mode_changed_back() {
+    gpio_set_level(pin_g_led, 1);
+    vTaskDelay(50);
+    gpio_set_level(pin_g_led, 0);
+    gpio_set_level(pin_r_led, 0);
+    vTaskDelay(50);
+    gpio_set_level(pin_r_led, 1);
 }
 
 // Reads input key from 4x3 Keypad. 
