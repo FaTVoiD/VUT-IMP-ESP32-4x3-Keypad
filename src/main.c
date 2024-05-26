@@ -1,10 +1,4 @@
 /*******************************************|
-|           IMP Project - Terminal          |
-|          Author: Veronika Laukova         |
-|           Login: xlauko00                 |
-|                                           |
-********************************************/
-/*******************************************|
 |    KEYPAD : R1 - GPIO12    C1 - GPIO14    |
 |             R2 - GPIO25    C2 - GPIO13    |
 |             R3 - GPIO17    C3 - GPIO16    |
